@@ -1,9 +1,7 @@
 import { formatDate, getStatusColor } from "@/helpers";
 import { TripListItemResponse } from "@/types";
 import { useRouter } from "expo-router";
-import { StyleSheet, TouchableOpacity } from "react-native";
-import { ThemedText } from "./themed-text";
-import { ThemedView } from "./themed-view";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface Props {
   trip: TripListItemResponse;
@@ -23,59 +21,47 @@ const TripCard = ({ trip }: Props) => {
       onPress={onPress}
       activeOpacity={0.8}
     >
-      <ThemedView style={styles.cardHeader}>
-        <ThemedView style={styles.vehicleInfo}>
-          <ThemedText style={styles.vehicleModel}>
-            {trip.vehicleModel}
-          </ThemedText>
-          <ThemedText style={styles.plateNumber}>
-            {trip.vehiclePlateNumber}
-          </ThemedText>
-        </ThemedView>
-        <ThemedView
+      <View style={styles.cardHeader}>
+        <View style={styles.vehicleInfo}>
+          <Text style={styles.vehicleModel}>{trip.vehicleModel}</Text>
+          <Text style={styles.plateNumber}>{trip.vehiclePlateNumber}</Text>
+        </View>
+        <View
           style={[
             styles.statusBadge,
             { backgroundColor: getStatusColor(trip.status) },
           ]}
         >
-          <ThemedText style={styles.statusText}>
-            {trip.status.replace("_", " ")}
-          </ThemedText>
-        </ThemedView>
-      </ThemedView>
+          <Text style={styles.statusText}>{trip.status.replace("_", " ")}</Text>
+        </View>
+      </View>
 
-      <ThemedView style={styles.locationContainer}>
-        <ThemedView style={styles.locationRow}>
-          <ThemedView style={styles.locationDot} />
-          <ThemedView style={styles.locationInfo}>
-            <ThemedText style={styles.locationLabel}>From</ThemedText>
-            <ThemedText style={styles.locationText}>
-              {trip.startLocation}
-            </ThemedText>
-          </ThemedView>
-        </ThemedView>
+      <View style={styles.locationContainer}>
+        <View style={styles.locationRow}>
+          <View style={styles.locationDot} />
+          <View style={styles.locationInfo}>
+            <Text style={styles.locationLabel}>From</Text>
+            <Text style={styles.locationText}>{trip.startLocation}</Text>
+          </View>
+        </View>
 
-        <ThemedView style={styles.locationLine} />
+        <View style={styles.locationLine} />
 
-        <ThemedView style={styles.locationRow}>
-          <ThemedView style={[styles.locationDot, styles.destinationDot]} />
-          <ThemedView style={styles.locationInfo}>
-            <ThemedText style={styles.locationLabel}>To</ThemedText>
-            <ThemedText style={styles.locationText}>
-              {trip.endLocation}
-            </ThemedText>
-          </ThemedView>
-        </ThemedView>
-      </ThemedView>
+        <View style={styles.locationRow}>
+          <View style={[styles.locationDot, styles.destinationDot]} />
+          <View style={styles.locationInfo}>
+            <Text style={styles.locationLabel}>To</Text>
+            <Text style={styles.locationText}>{trip.endLocation}</Text>
+          </View>
+        </View>
+      </View>
 
-      <ThemedView style={styles.cardFooter}>
-        <ThemedView style={styles.timeInfo}>
-          <ThemedText style={styles.timeLabel}>Started</ThemedText>
-          <ThemedText style={styles.timeText}>
-            {formatDate(trip.startedAt)}
-          </ThemedText>
-        </ThemedView>
-      </ThemedView>
+      <View style={styles.cardFooter}>
+        <View style={styles.timeInfo}>
+          <Text style={styles.timeLabel}>Started</Text>
+          <Text style={styles.timeText}>{formatDate(trip.startedAt)}</Text>
+        </View>
+      </View>
     </TouchableOpacity>
   );
 };
@@ -83,7 +69,6 @@ const TripCard = ({ trip }: Props) => {
 const styles = StyleSheet.create({
   cardContainer: {
     backgroundColor: "#FFFFFF",
-    marginHorizontal: 20,
     borderRadius: 16,
     padding: 16,
     shadowColor: "#000",

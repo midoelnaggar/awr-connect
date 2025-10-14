@@ -1,6 +1,4 @@
 import Button from "@/components/Button";
-import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
 import { validateEmail } from "@/helpers";
 import { useLazyGetUserQuery } from "@/store/api";
 import { useState } from "react";
@@ -8,7 +6,9 @@ import {
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
-  TextInput
+  Text,
+  TextInput,
+  View,
 } from "react-native";
 
 export default function LoginScreen() {
@@ -28,21 +28,19 @@ export default function LoginScreen() {
     getUser({ email });
   };
   return (
-    <ThemedView style={styles.container}>
+    <View style={styles.container}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.container}
       >
-        <ThemedView style={styles.content}>
-          <ThemedView style={styles.header}>
-            <ThemedText style={styles.title}>Welcome to AWR Connect</ThemedText>
-            <ThemedText style={styles.subtitle}>
-              Enter your email to continue
-            </ThemedText>
-          </ThemedView>
+        <View style={styles.content}>
+          <View style={styles.header}>
+            <Text style={styles.title}>Welcome to AWR Connect</Text>
+            <Text style={styles.subtitle}>Enter your email to continue</Text>
+          </View>
 
-          <ThemedView style={styles.form}>
-            <ThemedView style={styles.inputContainer}>
+          <View style={styles.form}>
+            <View style={styles.inputContainer}>
               <TextInput
                 style={[styles.input, emailError && styles.inputError]}
                 placeholder="Email address"
@@ -55,9 +53,9 @@ export default function LoginScreen() {
                 editable={!isFetching}
               />
               {emailError ? (
-                <ThemedText style={styles.errorText}>{emailError}</ThemedText>
+                <Text style={styles.errorText}>{emailError}</Text>
               ) : null}
-            </ThemedView>
+            </View>
 
             <Button
               onPress={handleLogin}
@@ -66,10 +64,10 @@ export default function LoginScreen() {
             >
               Login
             </Button>
-          </ThemedView>
-        </ThemedView>
+          </View>
+        </View>
       </KeyboardAvoidingView>
-    </ThemedView>
+    </View>
   );
 }
 
@@ -107,7 +105,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#1F2937",
     borderWidth: 1,
-    borderColor: "#F3F4F6",
+    borderColor: "black",
   },
   inputError: {
     borderColor: "#EF4444",
@@ -122,33 +120,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 24,
-  },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#E5E7EB",
-  },
-  dividerText: {
-    color: "#9CA3AF",
-    paddingHorizontal: 16,
-    fontSize: 14,
-  },
-  alternativeButton: {
-    borderWidth: 1,
-    borderColor: "#E5E7EB",
-    borderRadius: 12,
-    paddingVertical: 16,
-    alignItems: "center",
-  },
-  alternativeButtonText: {
-    color: "#3B82F6",
-    fontSize: 16,
-    fontWeight: "500",
-  },
-  footerText: {
-    textAlign: "center",
-    color: "#9CA3AF",
-    fontSize: 14,
-    marginTop: 32,
   },
 });

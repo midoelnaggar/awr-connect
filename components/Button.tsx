@@ -1,10 +1,10 @@
 import {
-    ActivityIndicator,
-    StyleSheet,
-    TouchableOpacity,
-    TouchableOpacityProps,
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TouchableOpacityProps,
 } from "react-native";
-import { ThemedText } from "./themed-text";
 
 interface Props extends TouchableOpacityProps {
   children: string;
@@ -25,9 +25,9 @@ const Button = ({
       {...props}
     >
       {loading ? (
-        <ActivityIndicator />
+        <ActivityIndicator color={"white"} />
       ) : (
-        <ThemedText style={styles.buttonText}>{children}</ThemedText>
+        <Text style={styles.buttonText}>{children}</Text>
       )}
     </TouchableOpacity>
   );
@@ -37,7 +37,7 @@ export default Button;
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: "#3B82F6",
+    backgroundColor: "black",
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: "center",

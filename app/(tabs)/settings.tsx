@@ -1,10 +1,8 @@
 import Button from "@/components/Button";
-import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
 import DefaultLayout from "@/providers/DefaultLayout";
 import { AppDispatch } from "@/store";
 import { logout } from "@/store/slices/userSlice";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { useDispatch } from "react-redux";
 
 export default function SettingsScreen() {
@@ -12,12 +10,12 @@ export default function SettingsScreen() {
 
   return (
     <DefaultLayout>
-      <ThemedView style={styles.container}>
-        <ThemedText style={styles.title}>Settings</ThemedText>
+      <View style={styles.container}>
+        <Text style={styles.title}>Settings</Text>
         <Button style={styles.logout} onPress={() => dispatch(logout())}>
           Logout
         </Button>
-      </ThemedView>
+      </View>
     </DefaultLayout>
   );
 }
