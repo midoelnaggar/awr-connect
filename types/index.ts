@@ -68,3 +68,7 @@ export interface LocationUpdate {
     speed: number | null;
     timestamp: Date;
 }
+
+export type TripParams = {
+    id: string;
+};

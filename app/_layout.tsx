@@ -3,16 +3,14 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from "@react-navigation/native";
-import { Slot } from "expo-router";
+import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 
-import { ThemedView } from "@/components/themed-view";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { StoreProvider } from "@/providers/StoreProvider";
-import { StyleSheet } from "react-native";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import ToastManager from "toastify-react-native";
 
 export const unstable_settings = {
@@ -27,12 +25,18 @@ export default function RootLayout() {
       <StoreProvider>
         <AuthProvider>
           <SafeAreaProvider>
-            <SafeAreaView style={styles.safeArea}>
-              <ThemedView style={styles.container}>
-                <Slot />
-              </ThemedView>
-              <ToastManager />
-            </SafeAreaView>
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen
+                name="trip/[id]"
+                options={({ route }) => ({
+                  headerShown: true,
+                  title: "Trip Preview",
+                  headerBackTitle: "Back",
+                  presentation: "card",
+                })}
+              />
+            </Stack>
+            <ToastManager />
             <StatusBar style="auto" />
           </SafeAreaProvider>
         </AuthProvider>
@@ -40,13 +44,3 @@ export default function RootLayout() {
     </ThemeProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-  },
-  container: {
-    flex: 1,
-    paddingHorizontal: 24,
-  },
-});

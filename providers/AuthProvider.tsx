@@ -10,9 +10,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const pathname = usePathname();
   useEffect(() => {
     if (userDetails === null) {
-      if (pathname === "/home") router.replace("/");
+      if (pathname !== "/login") router.replace("/login");
     } else {
-      if (["/"].includes(pathname)) router.replace("/home");
+      if (["/", "/login"].includes(pathname)) router.replace("/(tabs)");
     }
   }, [userDetails, pathname, router]);
 

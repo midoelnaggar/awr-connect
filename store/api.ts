@@ -23,8 +23,8 @@ const api = createApi({
             query: ({ email }) => `/api/users/${email}`,
             keepUnusedDataFor: 0,
         }),
-        getTrips: builder.query<TripListItemResponse[], void>({
-            query: () => `/api/trips`,
+        getMyTrips: builder.query<TripListItemResponse[], { driverId: string }>({
+            query: ({ driverId }) => `/api/trips?driverId=${driverId}`,
             keepUnusedDataFor: 0,
         }),
         getTrip: builder.query<TripResponse, { id: string }>({
@@ -36,7 +36,7 @@ const api = createApi({
 
 export const {
     useLazyGetUserQuery,
-    useGetTripsQuery,
+    useLazyGetMyTripsQuery,
     useLazyGetTripQuery,
 } = api
 
