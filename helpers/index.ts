@@ -1,5 +1,8 @@
+import * as Location from 'expo-location';
 import moment from "moment";
+import { Toast } from "toastify-react-native";
 import { ErrorType, Role, TripStatus } from "../types";
+
 
 export const isRole = (value: string | null): value is Role => {
     return value ? (["VENDOR", "AWR_TEAM"] as Role[]).includes(value as Role) : false;
@@ -16,13 +19,13 @@ export const formatDate = (date: Date | null) => {
 export const getStatusColor = (status: TripStatus) => {
     switch (status) {
         case 'IN_PROGRESS':
-            return 'bg-blue-500';
+            return 'blue';
         case 'COMPLETED':
-            return 'bg-green-500';
+            return 'green';
         case 'CANCELLED':
-            return 'bg-red-500';
+            return 'red';
         default:
-            return 'bg-gray-500';
+            return 'gray';
     }
 };
 
@@ -61,4 +64,28 @@ export const errorMessages: Record<ErrorType, string> = {
 export const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
+};
+
+export const getCurrentLocation = async () => {
+    try {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+
+        if (status !== 'granted') {
+            Toast.error('Permission denied, Location permission is required',);
+            return null;
+        }
+
+        const location = await Location.getCurrentPositionAsync({
+            accuracy: Location.Accuracy.High,
+        });
+
+        return {
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+        };
+    } catch (error) {
+        console.error('Error getting location:', error);
+        Toast.error('Error, Failed to get location');
+        return null;
+    }
 };

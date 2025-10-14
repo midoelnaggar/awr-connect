@@ -31,6 +31,38 @@ const api = createApi({
             query: ({ id }) => `/api/trips/${id}`,
             keepUnusedDataFor: 0,
         }),
+        startTrip: builder.mutation<{ message: string }, { id: string }>({
+            query: ({ id }) => ({
+                url: `/api/trips/${id}/start`,
+                method: "PATCH",
+            }),
+
+        }),
+        endTrip: builder.mutation<{ message: string }, { id: string }>({
+            query: ({ id }) => ({
+                url: `/api/trips/${id}/end`,
+                method: "PATCH",
+            }),
+
+        }),
+        cancelTrip: builder.mutation<{ message: string }, { id: string }>({
+            query: ({ id }) => ({
+                url: `/api/trips/${id}/cancel`,
+                method: "PATCH",
+            }),
+
+        }),
+        sendTripLocation: builder.mutation<{ message: string }, { id: string, latitude: number, longitude: number }>({
+            query: ({ id, longitude, latitude }) => ({
+                url: `/api/trips/${id}/location`,
+                method: "POST",
+                body: {
+                    longitude,
+                    latitude
+                }
+            }),
+
+        }),
     })
 })
 
@@ -38,6 +70,10 @@ export const {
     useLazyGetUserQuery,
     useLazyGetMyTripsQuery,
     useLazyGetTripQuery,
+    useStartTripMutation,
+    useEndTripMutation,
+    useCancelTripMutation,
+    useSendTripLocationMutation,
 } = api
 
 

@@ -61,6 +61,12 @@ const TripCard = ({ trip }: Props) => {
           <Text style={styles.timeLabel}>Started</Text>
           <Text style={styles.timeText}>{formatDate(trip.startedAt)}</Text>
         </View>
+        {trip?.endedAt && (
+          <View style={styles.timeInfo}>
+            <Text style={styles.timeLabel}>Ended</Text>
+            <Text style={styles.timeText}>{formatDate(trip.endedAt)}</Text>
+          </View>
+        )}
       </View>
     </TouchableOpacity>
   );
@@ -101,6 +107,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   statusBadge: {
+    backgroundColor: "red",
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
@@ -170,15 +177,15 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   timeInfo: {
-    alignItems: "flex-end",
+    alignItems: "flex-start",
   },
   timeLabel: {
-    fontSize: 12,
+    fontSize: 11,
     color: "#9CA3AF",
     marginBottom: 2,
   },
   timeText: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#1F2937",
   },
   emptyContainer: {

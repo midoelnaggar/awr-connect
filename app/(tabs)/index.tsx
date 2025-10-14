@@ -2,10 +2,12 @@ import TripCard from "@/components/TripCard";
 import DefaultLayout from "@/providers/DefaultLayout";
 import { AppState } from "@/store";
 import { useLazyGetMyTripsQuery } from "@/store/api";
-import { useEffect } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useEffect } from "react";
 import {
   ActivityIndicator,
   FlatList,
+  RefreshControl,
   StyleSheet,
   Text,
   View,
@@ -14,13 +16,28 @@ import { useSelector } from "react-redux";
 
 export default function HomeScreen() {
   const { userDetails } = useSelector((state: AppState) => state.user);
-  const [getMyTrips, { data, isFetching }] = useLazyGetMyTripsQuery();
+  const [getMyTrips, { data, isFetching, isLoading }] =
+    useLazyGetMyTripsQuery();
 
-  useEffect(() => {
+  const fetchTrips = useCallback(() => {
     if (userDetails?.id) {
       getMyTrips({ driverId: userDetails.id });
     }
-  }, [userDetails]);
+  }, [userDetails, getMyTrips]);
+
+  useEffect(() => {
+    fetchTrips();
+  }, [fetchTrips]);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchTrips();
+    }, [fetchTrips])
+  );
+
+  const onRefresh = useCallback(() => {
+    fetchTrips();
+  }, [fetchTrips]);
 
   return (
     <DefaultLayout>
@@ -29,7 +46,7 @@ export default function HomeScreen() {
           <Text style={styles.headerTitle}>Welcome, {userDetails?.name}</Text>
           <Text style={styles.headerSubtitle}>Your trips</Text>
         </View>
-        {isFetching ? (
+        {isLoading && !data ? (
           <View style={styles.loading}>
             <ActivityIndicator size={"large"} color={"black"} />
           </View>
@@ -42,6 +59,14 @@ export default function HomeScreen() {
             contentContainerStyle={styles.listContent}
             showsVerticalScrollIndicator={false}
             ItemSeparatorComponent={() => <View style={styles.separator} />}
+            refreshControl={
+              <RefreshControl
+                refreshing={isFetching}
+                onRefresh={onRefresh}
+                tintColor="black"
+                colors={["black"]}
+              />
+            }
           />
         )}
       </View>

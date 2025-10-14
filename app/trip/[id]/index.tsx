@@ -1,5 +1,17 @@
-import { calculateDuration, formatDate } from "@/helpers";
-import { useLazyGetTripQuery } from "@/store/api";
+import Button from "@/components/Button";
+import {
+  calculateDuration,
+  formatDate,
+  getCurrentLocation,
+  getStatusColor,
+} from "@/helpers";
+import {
+  useCancelTripMutation,
+  useEndTripMutation,
+  useLazyGetTripQuery,
+  useSendTripLocationMutation,
+  useStartTripMutation,
+} from "@/store/api";
 import { TripParams } from "@/types";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -13,11 +25,18 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Toast } from "toastify-react-native";
 
 const Trip = () => {
   const router = useRouter();
   const { id } = useLocalSearchParams<TripParams>();
-  const [getTrip, { data, isFetching }] = useLazyGetTripQuery();
+  const [getTrip, { data, isLoading }] = useLazyGetTripQuery();
+
+  const [startTrip, { isLoading: isStarting }] = useStartTripMutation();
+  const [endTrip, { isLoading: isEnding }] = useEndTripMutation();
+  const [cancelTrip, { isLoading: isCancelling }] = useCancelTripMutation();
+  const [sendTripLocation, { isLoading: isSendingLocation }] =
+    useSendTripLocationMutation();
 
   useEffect(() => {
     if (!!id) {
@@ -32,7 +51,76 @@ const Trip = () => {
     });
   };
 
-  return isFetching ? (
+  const handleStartTrip = async () => {
+    try {
+      const response = await startTrip({ id }).unwrap();
+
+      await getTrip({ id });
+
+      Toast.success(response.message || "Trip started successfully", "bottom");
+
+      return response;
+    } catch (error: any) {
+      Toast.error(error?.data?.message || "Failed to start trip");
+      throw error;
+    }
+  };
+
+  const handleEndTrip = async () => {
+    try {
+      const response = await endTrip({ id }).unwrap();
+
+      await getTrip({ id });
+
+      Toast.success(response.message || "Trip ended successfully", "bottom");
+
+      return response;
+    } catch (error: any) {
+      Toast.error(error?.data?.message || "Failed to end trip");
+      throw error;
+    }
+  };
+
+  const handleCancelTrip = async () => {
+    try {
+      const response = await cancelTrip({ id }).unwrap();
+
+      await getTrip({ id });
+
+      Toast.success(
+        response.message || "Trip cancelled successfully",
+        "bottom"
+      );
+
+      return response;
+    } catch (error: any) {
+      Toast.error(error?.data?.message || "Failed to cancel trip");
+      throw error;
+    }
+  };
+
+  const handleSendTripLocation = async () => {
+    try {
+      const location = await getCurrentLocation();
+      if (location) {
+        const response = await sendTripLocation({ id, ...location }).unwrap();
+
+        await getTrip({ id });
+
+        Toast.success(
+          response.message || "Location sent successfully",
+          "bottom"
+        );
+
+        return response;
+      }
+    } catch (error: any) {
+      Toast.error(error?.data?.message || "Failed to send location");
+      throw error;
+    }
+  };
+
+  return isLoading ? (
     <View style={styles.loading}>
       <ActivityIndicator size={"large"} color={"black"} />
     </View>
@@ -45,7 +133,19 @@ const Trip = () => {
         <View style={styles.cardHeader}>
           <View>
             <Text style={styles.cardTitle}>Trip Details</Text>
-            <Text style={styles.cardDescription}>Trip ID: {data.id}</Text>
+            <Text style={styles.cardDescription}>
+              Trip ID: {data.id.slice(data.id.length - 5, data.id.length)}
+            </Text>
+          </View>
+          <View
+            style={[
+              styles.statusBadge,
+              { backgroundColor: getStatusColor(data.status) },
+            ]}
+          >
+            <Text style={styles.statusText}>
+              {data.status.replace("_", " ")}
+            </Text>
           </View>
         </View>
 
@@ -206,6 +306,26 @@ const Trip = () => {
             </Text>
           </View>
         </View>
+        {data.status === "PENDING" && (
+          <Button onPress={handleStartTrip} loading={isStarting}>
+            Start trip
+          </Button>
+        )}
+        {data.status === "PENDING" && (
+          <Button onPress={handleCancelTrip} loading={isCancelling}>
+            Cancel trip
+          </Button>
+        )}
+        {data.status === "IN_PROGRESS" && (
+          <Button onPress={handleSendTripLocation} loading={isSendingLocation}>
+            Send current location
+          </Button>
+        )}
+        {data.status === "IN_PROGRESS" && (
+          <Button onPress={handleEndTrip} loading={isEnding}>
+            End trip
+          </Button>
+        )}
       </View>
     </ScrollView>
   ) : null;
@@ -257,6 +377,18 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     color: "black",
+  },
+  statusBadge: {
+    backgroundColor: "red",
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+  },
+  statusText: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: "#FFFFFF",
+    textTransform: "capitalize",
   },
   cardDescription: {
     fontSize: 14,
