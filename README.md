@@ -1,50 +1,94 @@
-# Welcome to your Expo app 👋
+# AWR Connect
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A mobile application built with [Expo](https://expo.dev) and React Native.
 
-## Get started
+## Getting Started
 
-1. Install dependencies
+### Prerequisites
 
+- Node.js (v18 or higher recommended)
+- npm or yarn package manager
+- Physical mobile device (iOS or Android)
+- Expo Go app installed on your mobile device
+
+### Setup Instructions
+
+1. **Clone the repository**:
    ```bash
-   npm install
+   git clone <repository-url>
+   cd awr-connect
    ```
 
-2. Start the app
-
+2. **Install dependencies**:
    ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+### Running the Application
+
+1. **Start the Expo development server**:
+   ```bash
+   npm start
+   # or
+   yarn start
+   # or
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+2. **Install Expo Go on your mobile device**:
+   - **iOS**: Download [Expo Go](https://apps.apple.com/us/app/expo-go/id982107779) from the App Store
+   - **Android**: Download [Expo Go](https://play.google.com/store/apps/details?id=host.exp.exponent) from Google Play Store
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+3. **Connect your device**:
+   - Make sure your mobile device and development machine are connected to the **same Wi-Fi network**
+   - Open the Expo Go app on your mobile device
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+4. **Scan the QR code**:
+   - **iOS**: Use the built-in QR scanner in the Expo Go app
+   - **Android**: Use the built-in QR scanner in the Expo Go app
+   - Scan the QR code displayed in your terminal after running `npm start`
 
-## Get a fresh project
+### Troubleshooting
 
-When you're ready, run:
+#### Connection Issues
+- Ensure both your computer and mobile device are on the same Wi-Fi network
+- If the QR code doesn't work, try typing the URL manually in Expo Go
+- Check your firewall settings if the connection fails
+- Try using tunnel mode by pressing `t` in the terminal after starting Expo
+
+#### Alternative Running Methods
+If you're having network issues, you can also:
+- Press `a` to open Android emulator (requires Android Studio)
+- Press `i` to open iOS simulator (macOS only, requires Xcode)
+- Press `w` to open in web browser
+
+### Development
+
+- The app will reload automatically as you make changes to the code
+- Shake your device to access the developer menu
+- Check the terminal for logs and error messages
+
+### Learn More
+
+- [Expo Documentation](https://docs.expo.dev) - Learn about Expo features and API
+- [React Native Documentation](https://reactnative.dev) - Learn about React Native
+- [Expo Go](https://expo.dev/client) - More information about the Expo Go app
+
+### Building for Production
+
+To create standalone builds for the app stores:
 
 ```bash
-npm run reset-project
+# For iOS
+npx eas build --platform ios
+
+# For Android
+npx eas build --platform android
+
+# For both platforms
+npx eas build --platform all
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Note: Production builds require an Expo account and additional configuration. See [Expo Build Documentation](https://docs.expo.dev/build/introduction/) for more details.
